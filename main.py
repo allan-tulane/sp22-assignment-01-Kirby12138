@@ -4,23 +4,32 @@ See assignment-01.pdf for details.
 """
 # no imports needed.
 
+# The foo function calculates the x-th Fibonacci sequence.
+# It consists of the base case and recursive steps.
+# The base cases are when x <= 1, then return the value of x
+# What the recursive step does is simply add (x-1)-th Fibonacci sequence and (x-2)th Fibonacci Sequence
 def foo(x):
-    if x<=1:
+    if x <= 1:
         return x
-    else:
-        return foo(x-1) +foo(x-2)
+    return foo(x-1) + foo(x-2)
+
 
 def longest_run(mylist, key):
-    count = 0
-    max = 0
-    for i in mylist:
-        if i == key:
-            count = count + 1
-            if count >= max:
-                max = count
-        else:
-            count = 0
-    return max
+    longest = -float("inf")
+    cnt = 0
+    for i in range(len(mylist)):
+        if i == 0 and mylist[i] == key:
+            cnt = 1
+        if mylist[i] == mylist[i-1] and mylist[i] == key:
+            cnt += 1
+        elif mylist[i] == key:
+            cnt = 1
+        longest = max(cnt,longest)
+
+    return longest
+# work = O(n)
+# span = O(n)
+        
 
 
 class Result:
@@ -36,42 +45,22 @@ class Result:
               (self.longest_size, self.left_size, self.right_size, self.is_entire_range))
     
     
-def longest_run_recursive(mylist,key):
-    if len(mylist) == 1:
-        if mylist[0] == key:
-            result = Result(0, 0, 1, True)
-            return result
-        result = Result(0, 0, 0, False)
-        return result
-
-    mid = len(mylist)//2
-    left = longest_run_recursive(mylist[0:mid],key)
-    right = longest_run_recursive(mylist[mid:],key)
-  
-    leftleft = left.left_size
-    rightright = right.right_size
-    longest = 0
-
-    if left.is_entire_range:
-        leftleft = mid
-    if right.is_entire_range:
-        rightright = len(mylist)-mid
-
-    if left.is_entire_range and right.is_entire_range:
-        result = Result(leftleft, rightright, len(mylist), True)
-        return result
-
-    if right.left_size > 0 and left.right_size > 0 or right.is_entire_range and left.right_size >0 or left.is_entire_range and right.left_size >0:
-        longest = left.longest_size + right.longest_size
+def longest_run_recursive(mylist, key):
+    ### TODO
+    if len(mylist) == 1 and mylist[0] == key:
+        return Result(1, 1, 1, True)
     else:
-        longest = max(right.longest_size, left.longest_size)
-  
-    result = Result(leftleft, rightright, longest, False)
-    return result
+        return Result(0,0,0,False)
+    left = longest_run_recursive(mylist[ :len(mylist)//2], key)
+    right = longest_run_recursive(mylist[len(mylist)//2: ], key)
+    return 
+    
+        
 
 ## Feel free to add your own tests here.
 def test_longest_run():
-    assert longest_run([2,12,12,8,12,12,12,0,12,1], 12) == 3
+    return longest_run([2,12,12,8,12,12,12,0,12,1,1], 12)
 
-print(longest_run_recursive([0,2,4,2,2,2,2,0,2,2], 2))
+print(foo(10))
+print(test_longest_run())
 
